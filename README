@@ -1,0 +1,21 @@
+= Twitter-text
+
+A couple of PHP classes that provide auto=links and extraction of usernames,
+lists, hashtags and URLs in a way consistant with the twitter-text-rb and
+twitter-text-java projects by Matt Sanford
+
+== Auto-Linking Example
+
+require_once('Twitter/Autolink.php');
+
+$autolinker = new Twitter_Autolink();
+$html = $autolinker->autolink('Tweet mentioning @mikenz and refuring to his list @mikeNZ/sports and website http://mikenz.geek.nz');
+echo $html;
+
+== Extraction Example
+
+require_once('Twitter/Extractor.php');
+
+$extractor = new Twitter_Extractor();
+$data = $extractor->extractAll('Tweet mentioning @mikenz and referring to his list @mikeNZ/sports and website http://mikenz.geek.nz');
+var_dump($data);

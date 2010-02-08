@@ -1,0 +1,3 @@
+
+- Move All the regex into one place, not duplicated between the clases
+- PHP Doc and cleanup

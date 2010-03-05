@@ -48,7 +48,7 @@ class Twitter_Autolink {
 
     public function autoLinkURLs($tweet) {
           $URL_VALID_PRECEEDING_CHARS = "(?:[^/\"':!=]|^|\\:)";
-          $URL_VALID_DOMAIN = "(?:[\\.-]|[^\\p{P}])+\\.[a-z]{2,}(?::[0-9]+)?";
+          $URL_VALID_DOMAIN = "(?:[\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?";
           $URL_VALID_URL_PATH_CHARS = "[a-z0-9!\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~]";
           // Valid end-of-path chracters (so /foo. does not gobble the period).
           //   1. Allow ) for Wikipedia URLs.

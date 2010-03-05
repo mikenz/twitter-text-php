@@ -18,7 +18,7 @@ class Twitter_Extractor {
 
     public function extraclURLS($tweet) {
         $URL_VALID_PRECEEDING_CHARS = "(?:[^/\"':!=]|^|\\:)";
-        $URL_VALID_DOMAIN = "(?:[\\.-]|[^\\p{P}])+\\.[a-z]{2,}(?::[0-9]+)?";
+        $URL_VALID_DOMAIN = "(?:[\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?";
         $URL_VALID_URL_PATH_CHARS = "[a-z0-9!\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~]";
         // Valid end-of-path chracters (so /foo. does not gobble the period).
         //   1. Allow ) for Wikipedia URLs.
@@ -49,8 +49,14 @@ class Twitter_Extractor {
      * @return Array of usernames referenced (without the leading @ sign)
      */
     public function extractMentionedScreennames($tweet) {
-        preg_match_all('/(^|[^a-zA-Z0-9_])[@＠]([a-zA-Z0-9_]{1,20})(?!@)/', $tweet, $matches);
-        return $matches[2];
+        preg_match_all('/(^|[^a-zA-Z0-9_])[@＠]([a-zA-Z0-9_]{1,20})(?=(.|$))/', $tweet, $matches);
+        $usernames = array();
+        for ($i = 0; $i < sizeof($matches[2]); $i += 1) {
+          if (! preg_match('/^[@＠]/', $matches[3][$i])) {
+            array_push($usernames, $matches[2][$i]);
+          }  
+        }
+        return $usernames;
     }
 
     public function extractReplyScreenname($tweet) {

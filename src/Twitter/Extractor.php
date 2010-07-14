@@ -1,6 +1,6 @@
 <?php
 
-class Twitter_Extractor {
+class Twitter_Extractor implements Twitter_Regex {
 
   public function extractAll($tweet) {
     return array(
@@ -12,32 +12,22 @@ class Twitter_Extractor {
   }
 
   public function extractHashtags($tweet) {
-    preg_match_all('$(^|[^0-9A-Z&/]+)([#＃]+)([0-9A-Z_]*[A-Z_]+[a-z0-9_üÀ-ÖØ-öø-ÿ]*)$i', $tweet, $matches);
+    preg_match_all(self::HASHTAG, $tweet, $matches);
     return $matches[3];
   }
 
   public function extractURLs($tweet) {
-    $URL_VALID_PRECEEDING_CHARS = "(?:[^/\"':!=]|^|\\:)";
-    $URL_VALID_DOMAIN = "(?:[\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?";
-    $URL_VALID_URL_PATH_CHARS = "[a-z0-9!\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~@]";
-    # Valid end-of-path chracters (so /foo. does not gobble the period).
-    # 1. Allow ) for Wikipedia URLs.
-    # 2. Allow =&# for empty URL parameters and other URL-join artifacts
-    $URL_VALID_URL_PATH_ENDING_CHARS = "[a-z0-9\\)=#/]";
-    $URL_VALID_URL_QUERY_CHARS = "[a-z0-9!\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~]";
-    $URL_VALID_URL_QUERY_ENDING_CHARS = "[a-z0-9_&=#]";
-    $VALID_URL_PATTERN_STRING = '$(' .            # $1 total match
-      "(" . $URL_VALID_PRECEEDING_CHARS . ")" .   # $2 Preceeding chracter
-      "(" .                                       # $3 URL
-      "(https?://|www\\.)" .                      # $4 Protocol or beginning
-      "(" . $URL_VALID_DOMAIN . ")" .             # $5 Domain(s) and optional port number
-      "(/" . $URL_VALID_URL_PATH_CHARS . "*" .    # $6 URL Path
-      $URL_VALID_URL_PATH_ENDING_CHARS . "?)?" .
-      "(\\?" . $URL_VALID_URL_QUERY_CHARS . "*" . # $7 Query String
-      $URL_VALID_URL_QUERY_ENDING_CHARS . ")?" .
-      ")" .
-      ')$i';
-
+    $VALID_URL_PATTERN_STRING = '$('                 # $1 total match
+      . '('.self::URL_VALID_PRECEEDING_CHARS.')'     # $2 Preceeding chracter
+      . '('                                          # $3 URL
+      . '(https?://|www\\.)'                         # $4 Protocol or beginning
+      . '('.self::URL_VALID_DOMAIN.')'               # $5 Domain(s) (and port)
+      . '(/'.self::URL_VALID_URL_PATH_CHARS.'*'      # $6 URL Path
+      . self::URL_VALID_URL_PATH_ENDING_CHARS.'?)?'
+      . '(\\?'.self::URL_VALID_URL_QUERY_CHARS.'*'   # $7 Query String
+      . self::URL_VALID_URL_QUERY_ENDING_CHARS.')?'
+      . ')'
+      . ')$i';
     preg_match_all($VALID_URL_PATTERN_STRING, $tweet, $matches);
     return $matches[3];
   }

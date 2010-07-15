@@ -12,4 +12,5 @@ Thumbs.db
 __MACOSX
 
 # Project Specific
-
+build
+tests/spyc

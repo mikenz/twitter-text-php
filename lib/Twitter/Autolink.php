@@ -412,11 +412,12 @@ class Twitter_Autolink extends Twitter_Regex {
    */
   protected function _addLinksToURLs($matches) {
     $replacement = $matches[2];
-    if (!preg_match('!https?://!', $matches[3])) {
-      $matches[3] = 'http://'.$matches[3];
-    }
     $url = $matches[3];
-    $replacement .= $this->wrap($url, $this->class_url, $url);
+    $element = $matches[3];
+    if (!preg_match('!https?://!', $matches[3])) {
+      $url = 'http://'.$matches[3];
+    }
+    $replacement .= $this->wrap($url, $this->class_url, $element);
     return $replacement;
   }
 

@@ -25,26 +25,32 @@
 abstract class Twitter_Regex {
 
   /**
+   * Expression to at sign characters
+   *
+   * @var  string
+   */
+  const REGEX_AT_SIGNS = '[@＠]';
+
+  /**
    * Expression to match characters that may come before a URL.
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_BEFORE = '(?:[^/\"\':!=]|^|\\:)';
+  const REGEX_URL_CHARS_BEFORE = '(?:[^/"\':!=]|^|\\:)';
 
   /**
    * Expression to match the domain portion of a URL.
    *
    * @var  string
    */
-  const REGEX_URL_DOMAIN = '(?:[\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
+  const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\s][\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
 
   /**
    * Expression to match characters that may come in the URL path.
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_PATH = '[a-z0-9!\\*\'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~@]';
-
+  const REGEX_URL_CHARS_PATH = '(?:(?:\([^\)]+\))|@[^\\/]+\\/|[\\.\\,]?[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~])';
 
   /**
    * Expression to match characters that may come at the end of the URL path.
@@ -55,14 +61,14 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_PATH_END = '[a-z0-9\\)=#/]';
+  const REGEX_URL_CHARS_PATH_END = '[a-z0-9=#\\/]';
 
   /**
    * Expression to match characters that may come in the URL query string.
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_QUERY = '[a-z0-9!\\*\'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~]';
+  const REGEX_URL_CHARS_QUERY = '[a-z0-9!\\*\'\\(\\);:&=\\+\\$\\/%#\\[\\]\\-_\\.,~]';
 
   /**
    * Expression to match characters that may come at the end of the URL query 
@@ -103,7 +109,7 @@ abstract class Twitter_Regex {
    *   0x0020        White_Space # Zs # SPACE
    *   0x0085        White_Space # Cc # <control-0085>
    *   0x00A0        White_Space # Zs # NO-BREAK SPACE
-   * Mutli byte whitespace characters
+   * Multi byte whitespace characters
    *   0x1680        White_Space # Zs # OGHAM SPACE MARK
    *   0x180E        White_Space # Zs # MONGOLIAN VOWEL SEPARATOR
    *   0x2000-0x200A White_Space # Zs # EN QUAD..HAIR SPACE

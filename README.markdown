@@ -1,39 +1,49 @@
 # Twitter Text (PHP Edition) #
 
-A couple of PHP classes that provide auto=links and extraction of usernames,
-lists, hashtags and URLs in a way consistant with the twitter-text-rb and
-twitter-text-java projects by Matt Sanford
+A library of PHP classes that provide auto-linking and extraction of usernames,
+lists, hashtags and URLs from tweets.  Originally created from twitter-text-rb
+and twitter-text-java projects by Matt Sanford and ported to PHP by Mike
+Cochrane, this library has been touched up by Nick Pope.
+
+## Features ##
+
+### Autolink ##
+
+ - Add links to all matching Twitter usernames (no account verification).
+ - Add links to all user lists (of the form @username/list-name).
+ - Add links to all valid hashtags.
+ - Add links to all URLs.
+ - Support for international character sets.
+
+### Extractor ###
+
+ - Extract mentioned Twitter usernames (from anywhere in the tweet).
+ - Extract replied to Twitter usernames (from start of the tweet).
+ - Extract all user lists (of the form @username/list-name).
+ - Extract all valid hashtags.
+ - Extract all URLs.
+ - Support for international character sets.
 
 ## Examples ##
 
-### Auto-Linking ###
+For examples, please see `test/example.php` which you can view in a browser or
+run from the command line.
 
-    $tweet = 'Tweet mentioning @mikenz and referring to his list @mikeNZ/sports and website http://mikenz.geek.nz';
+## Conformance ##
 
-    require_once 'Twitter/Autolink.php';
-    $html = Twitter_Autolink::create($tweet)
-      ->setNoFollow(false)
-      ->setUserClass('person')
-      ->addLinks();
-    echo $html;
+You'll need the test data which is in YAML format from the following
+repository:
 
-### Extraction ###
+    http://github.com/mzsanford/twitter-text-conformance in tests/data/twitter-text-conformance.
 
-    $tweet = 'Tweet mentioning @mikenz and referring to his list @mikeNZ/sports and website http://mikenz.geek.nz';
-
-    require_once 'Twitter/Extractor.php';
-    $data = Twitter_Extractor::create($tweet)->extract();
-    var_dump($data);
-
-## Tests ##
-
-You'll need the test data from http://github.com/mzsanford/twitter-text-conformance in tests/data/twitter-text-conformance.
-It has been added as a git submodule so you should just need to run:
+It has already been added as a git submodule so you should just need to run:
 
     git submodule init
     git submodule update
 
-As PHP has no native support for YAML you'll need to checkout spyc from svn into tests/spyc:
+As PHP has no native support for YAML you'll need to checkout spyc from svn
+into `tests/spyc`:
+
     svn checkout http://spyc.googlecode.com/svn/trunk/ tests/spyc
 
 In your browser load the runtests.php file.

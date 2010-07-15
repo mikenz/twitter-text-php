@@ -114,7 +114,7 @@ class Twitter_Extractor extends Twitter_Regex {
    */
   public function extractRepliedUsernames() {
     preg_match(self::$REGEX_REPLY_USERNAME, $this->tweet, $matches);
-    return isset($matches[2]) ? $matches[2] : array();
+    return isset($matches[2]) ? $matches[2] : '';
   }
 
 }

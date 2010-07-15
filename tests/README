@@ -1,7 +1,0 @@
-You'll need the test-data from http://github.com/mzsanford/twitter-text-conformance in test-data/twitter-text-conformance
-    git clone git://github.com/mzsanford/twitter-text-conformance.git test-data/twitter-text-conformance
-
-As PHP has no native support for YAML you'll need to checkout spyc from svn into tests/spyc
-    svn checkout http://spyc.googlecode.com/svn/trunk/ tests/spyc
-
-In your browser load the runtests.php file.

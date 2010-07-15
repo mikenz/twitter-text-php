@@ -1,1 +1,2 @@
 - Generate PHP Documentation
+- Add a phing build.xml file for generating documentation and running tests.

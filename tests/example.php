@@ -10,6 +10,9 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0  Apache License v2.0
  */
 
+if (!defined('E_DEPRECATED')) define('E_DEPRECATED', 8192);
+error_reporting(E_ALL | E_STRICT | E_DEPRECATED);
+
 $ROOT = dirname(dirname(__FILE__));
 
 require_once $ROOT.'/lib/Twitter/Autolink.php';
@@ -18,9 +21,7 @@ require_once $ROOT.'/lib/Twitter/Extractor.php';
 $browser = (PHP_SAPI != 'cli');
 
 function print_array(array $a) {
-  ob_start();
-  print_r($a);
-  $p = ob_get_clean();
+  $p = print_r($a, true);
   $p = str_replace('  ', ' ', $p);
   echo preg_replace(array(
     '!^Array\s+\(\s+!',

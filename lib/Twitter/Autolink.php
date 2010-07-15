@@ -129,13 +129,18 @@ class Twitter_Autolink extends Twitter_Regex {
    * @see  htmlspecialchars()
    *
    * @param  string  $tweet        The tweet to be converted.
+   * @param  bool    $escape       Whether to escape the tweet (default: true).
    * @param  bool    $full_encode  Whether to encode all special characters.
    */
-  public function __construct($tweet, $full_encode = false) {
-    if ($full_encode) {
-      parent::__construct(htmlentities($tweet, ENT_QUOTES, 'UTF-8', false));
+  public function __construct($tweet, $escape = true, $full_encode = false) {
+    if ($escape) {
+      if ($full_encode) {
+        parent::__construct(htmlentities($tweet, ENT_QUOTES, 'UTF-8', false));
+      } else {
+        parent::__construct(htmlspecialchars($tweet, ENT_QUOTES, 'UTF-8', false));
+      }
     } else {
-      parent::__construct(htmlspecialchars($tweet, ENT_QUOTES, 'UTF-8', false));
+      parent::__construct($tweet);
     }
   }
 

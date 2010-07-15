@@ -372,13 +372,14 @@ class Twitter_Autolink extends Twitter_Regex {
    * @return  string  The tweet element with a link applied.
    */
   protected function wrap($url, $class, $element) {
-    $link  = '<a href="'.$url.'"';
+    $link  = '<a';
     if ($class) $link .= ' class="'.$class.'"';
+    $link .= ' href="'.$url.'"';
     $rel = array();
     if ($this->external) $rel[] = 'external';
     if ($this->nofollow) $rel[] = 'nofollow';
     if (!empty($rel)) $link .= ' rel="'.implode(' ', $rel).'"';
-    if (!$this->external) $link .= ' target="'.$this->target.'"';
+    if ($this->target) $link .= ' target="'.$this->target.'"';
     $link .= '>'.$element.'</a>';
     return $link;
   }

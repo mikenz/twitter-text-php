@@ -26,7 +26,7 @@ Cochrane, this library has been touched up by Nick Pope.
 
 ## Examples ##
 
-For examples, please see `test/example.php` which you can view in a browser or
+For examples, please see `tests/example.php` which you can view in a browser or
 run from the command line.
 
 ## Conformance ##
@@ -34,7 +34,7 @@ run from the command line.
 You'll need the test data which is in YAML format from the following
 repository:
 
-    http://github.com/mzsanford/twitter-text-conformance in tests/data/twitter-text-conformance.
+    http://github.com/mzsanford/twitter-text-conformance
 
 It has already been added as a git submodule so you should just need to run:
 
@@ -46,4 +46,9 @@ into `tests/spyc`:
 
     svn checkout http://spyc.googlecode.com/svn/trunk/ tests/spyc
 
-In your browser load the runtests.php file.
+There are a couple of options for testing conformance:
+
+1. Run `phpunit` in from the root folder of the project.
+2. Run `tests/runtests.php` from the command line.
+3. Make `tests/runtests.php` accessible on a web server and view it in your
+   browser.

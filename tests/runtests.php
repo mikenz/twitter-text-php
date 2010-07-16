@@ -10,17 +10,18 @@
  * @license    http://www.apache.org/licenses/LICENSE-2.0  Apache License v2.0
  */
 
-if (!defined('E_DEPRECATED')) define('E_DEPRECATED', 8192);
-error_reporting(E_ALL | E_STRICT | E_DEPRECATED);
-
-$ROOT = dirname(dirname(__FILE__));
-$DATA = $ROOT.'/tests/data/twitter-text-conformance';
-
-require_once $ROOT.'/lib/Twitter/Autolink.php';
-require_once $ROOT.'/lib/Twitter/Extractor.php';
-require_once $ROOT.'/tests/spyc/spyc.php';
+require_once dirname(__FILE__).'/bootstrap.php';
 
 $browser = (PHP_SAPI != 'cli');
+
+function pretty_format($a) {
+  return preg_replace(array(
+    "/\n/", '/ +\[/', '/ +\)/', '/Array +\(/', '/(?<!\() \[/', '/\[([^]]+)\]/',
+    '/"(\d+)"/', '/(?<=^| )\((?= )/', '/(?<= )\)(?=$| )/',
+  ), array(
+    ' ', ' [', ' )', '(', ', [', '"$1"', '$1', '[', ']',
+  ), print_r($a, true));
+}
 
 $pass_total = 0;
 $fail_total = 0;
@@ -66,6 +67,7 @@ $functions = array(
   'urls'     => 'extractURLs',
   'mentions' => 'extractMentionedUsernames',
   'replies'  => 'extractRepliedUsernames',
+  'hashtags_with_indices' => 'extractHashtagsWithIndices',
 );
 
 # Perform testing.
@@ -100,14 +102,14 @@ foreach ($data['tests'] as $group => $tests) {
       if ($browser) {
         echo '<pre>';
         echo 'Original: '.htmlspecialchars($test['text'], ENT_QUOTES, 'UTF-8', false), PHP_EOL;
-        echo 'Expected: '.str_replace("\n", ' ', print_r($test['expected'], true)), PHP_EOL;
-        echo 'Actual:   '.str_replace("\n", ' ', print_r($extracted, true));
+        echo 'Expected: '.pretty_format($test['expected']), PHP_EOL;
+        echo 'Actual:   '.pretty_format($extracted);
         echo '</pre>';
       } else {
         echo PHP_EOL, PHP_EOL;
         echo '   Original: '.$test['text'], PHP_EOL;
-        echo '   Expected: '.str_replace("\n", ' ', print_r($test['expected'], true)), PHP_EOL;
-        echo '   Actual:   '.str_replace("\n", ' ', print_r($extracted, true)), PHP_EOL;
+        echo '   Expected: '.pretty_format($test['expected']), PHP_EOL;
+        echo '   Actual:   '.pretty_format($extracted), PHP_EOL;
       }
     }
     if ($browser) echo '</li>';
@@ -189,14 +191,14 @@ foreach ($data['tests'] as $group => $tests) {
       if ($browser) {
         echo '<pre>';
         echo 'Original: '.htmlspecialchars($test['text'], ENT_QUOTES, 'UTF-8', false), PHP_EOL;
-        echo 'Expected: '.str_replace("\n", ' ', print_r($test['expected'], true)), PHP_EOL;
-        echo 'Actual:   '.str_replace("\n", ' ', print_r($linked, true));
+        echo 'Expected: '.pretty_format($test['expected']), PHP_EOL;
+        echo 'Actual:   '.pretty_format($linked);
         echo '</pre>';
       } else {
         echo PHP_EOL, PHP_EOL;
         echo '   Original: '.$test['text'], PHP_EOL;
-        echo '   Expected: '.str_replace("\n", ' ', print_r($test['expected'], true)), PHP_EOL;
-        echo '   Actual:   '.str_replace("\n", ' ', print_r($linked, true)), PHP_EOL;
+        echo '   Expected: '.pretty_format($test['expected']), PHP_EOL;
+        echo '   Actual:   '.pretty_format($linked), PHP_EOL;
       }
     }
     if ($browser) echo '</li>';

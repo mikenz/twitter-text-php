@@ -99,7 +99,7 @@ abstract class Twitter_Regex {
    *
    * @todo  Match latin characters with accents.
    */
-  const REGEX_HASHTAG = '$(^|[^0-9A-Z&/]+)([#＃]+)([0-9A-Z_]*[A-Z_]+[a-z0-9_üÀ-ÖØ-öø-ÿ]*)$i';
+  const REGEX_HASHTAG = '$(^|[^0-9A-Z&/]+)([#＃]+)([0-9A-Z_]*[A-Z_]+[a-z0-9_üÀ-ÖØ-öø-ÿ]*)$iu';
 
   /**
    * Expression to match whitespace.

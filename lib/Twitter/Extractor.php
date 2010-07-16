@@ -63,7 +63,8 @@ class Twitter_Extractor extends Twitter_Regex {
       'hashtags' => $this->extractHashtags(),
       'urls'     => $this->extractURLs(),
       'mentions' => $this->extractMentionedUsernames(),
-      'replyto'  => $this->extractRepliedUsernames()
+      'replyto'  => $this->extractRepliedUsernames(),
+      'hashtags_with_indices' => $this->extractHashtags(),
     );
   }
 
@@ -115,6 +116,25 @@ class Twitter_Extractor extends Twitter_Regex {
   public function extractRepliedUsernames() {
     preg_match(self::$REGEX_REPLY_USERNAME, $this->tweet, $matches);
     return isset($matches[2]) ? $matches[2] : '';
+  }
+
+  /**
+   * Extracts all the hashtags and the indices they occur at from the tweet.
+   *
+   * @return  array  The hashtag elements in the tweet.
+   */
+  public function extractHashtagsWithIndices() {
+    preg_match_all(self::REGEX_HASHTAG, $this->tweet, $matches, PREG_OFFSET_CAPTURE);
+    $m = &$matches[3];
+    for ($i = 0; $i < count($m); $i++) {
+      $m[$i] = array_combine(array('hashtag', 'indices'), $m[$i]);
+      # XXX: Fix for PREG_OFFSET_CAPTURE returning byte offsets...
+      $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
+      $start += mb_strlen($matches[1][$i][0]);
+      $length = mb_strlen($m[$i]['hashtag']);
+      $m[$i]['indices'] = array($start, $start + $length + 1);
+    }
+    return $m;
   }
 
 }

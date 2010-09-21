@@ -434,16 +434,18 @@ class Twitter_Autolink extends Twitter_Regex {
     $replacement = $matches[1].$matches[2];
     if (isset($matches[4])) {
       # Replace the list and username
-      $element = $matches[3] . $matches[4];
+      $element = $matches[3] . substr($matches[4], 0, 26);
       $class = $this->class_list;
       $url = $this->url_base_list . $element;
+      $postfix = substr($matches[4], 26);
     } else {
       # Replace the username
       $element = $matches[3];
       $class = $this->class_user;
       $url = $this->url_base_user . $element;
+      $postfix = '';
     }
-    $replacement .= $this->wrap($url, $class, $element);
+    $replacement .= $this->wrap($url, $class, $element) . $postfix;
     return $replacement;
   }
 

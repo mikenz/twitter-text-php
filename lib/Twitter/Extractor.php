@@ -53,7 +53,7 @@ class Twitter_Extractor extends Twitter_Regex {
   }
 
   /**
-   * Extracts all parts of a tweet and returns an associative array containing 
+   * Extracts all parts of a tweet and returns an associative array containing
    * the extracted elements.
    *
    * @return  array  The elements in the tweet.
@@ -85,7 +85,20 @@ class Twitter_Extractor extends Twitter_Regex {
    */
   public function extractURLs() {
     preg_match_all(self::$REGEX_VALID_URL, $this->tweet, $matches);
-    return $matches[3];
+    list($all, $before, $url, $protocol, $domain, $path, $query) = array_pad($matches, 7, '');
+    $i = count($url)-1;
+    for (; $i >= 0; $i--) {
+      if (!preg_match('!https?://!', $protocol[$i])) {
+        # Note: $protocol can contain 'www.' if no protocol exists!
+        if (preg_match(self::REGEX_PROBABLE_TLD, $domain[$i]) || strtolower($protocol[$i]) === 'www.') {
+          $url[$i] = 'http://'.(strtolower($protocol[$i]) === 'www.' ? $protocol[$i] : '').$domain[$i];
+        } else {
+          unset($url[$i]);
+        }
+      }
+    }
+    # Renumber the array:
+    return array_values($url);
   }
 
   /**
@@ -97,11 +110,12 @@ class Twitter_Extractor extends Twitter_Regex {
    */
   public function extractMentionedUsernames() {
     preg_match_all(self::REGEX_USERNAME_MENTION, $this->tweet, $matches);
+    list($all, $before, $username, $after) = array_pad($matches, 4, '');
     $usernames = array();
-    for ($i = 0; $i < count($matches[2]); $i ++) {
-      if (!preg_match('/^[@＠]/', $matches[3][$i])) {
-        array_push($usernames, $matches[2][$i]);
-      }
+    for ($i = 0; $i < count($username); $i ++) {
+      # If $after is not empty, there is an invalid character.
+      if (!empty($after[$i])) continue;
+      array_push($usernames, $username[$i]);
     }
     return $usernames;
   }

@@ -411,14 +411,18 @@ class Twitter_Autolink extends Twitter_Regex {
    * @return  string  The link-wrapped URL.
    */
   protected function _addLinksToURLs($matches) {
-    $replacement = $matches[2];
-    $url = $matches[3];
-    $element = $matches[3];
-    if (!preg_match('!https?://!', $matches[3])) {
-      $url = 'http://'.$matches[3];
+    list($all, $before, $url, $protocol, $domain, $path, $query) = array_pad($matches, 7, '');
+    $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
+    $href = $url;
+    if (!preg_match('!https?://!', $protocol)) {
+      # Note: $protocol can contain 'www.' if no protocol exists!
+      if (preg_match(self::REGEX_PROBABLE_TLD, $domain) || strtolower($protocol) === 'www.') {
+        $href = 'http://'.(strtolower($protocol) === 'www.' ? $protocol : '').$domain;
+      } else { # Don't want to add link...
+        return $all;
+      }
     }
-    $replacement .= $this->wrap($url, $this->class_url, $element);
-    return $replacement;
+    return $before . $this->wrap($href, $this->class_url, $url);
   }
 
   /**
@@ -431,22 +435,23 @@ class Twitter_Autolink extends Twitter_Regex {
    * @return  string  The link-wrapped username/list pair.
    */
   protected function _addLinksToUsernamesAndLists($matches) {
-    $replacement = $matches[1].$matches[2];
-    if (isset($matches[4])) {
+    list($all, $before, $at, $username, $slash_listname, $after) = array_pad($matches, 6, '');
+    # If $after is not empty, there is an invalid character.
+    if (!empty($after)) return $all;
+    if (!empty($slash_listname)) {
       # Replace the list and username
-      $element = $matches[3] . substr($matches[4], 0, 26);
+      $element = $username . substr($slash_listname, 0, 26);
       $class = $this->class_list;
       $url = $this->url_base_list . $element;
-      $postfix = substr($matches[4], 26);
+      $postfix = substr($slash_listname, 26);
     } else {
       # Replace the username
-      $element = $matches[3];
+      $element = $username;
       $class = $this->class_user;
       $url = $this->url_base_user . $element;
       $postfix = '';
     }
-    $replacement .= $this->wrap($url, $class, $element) . $postfix;
-    return $replacement;
+    return $before . $at . $this->wrap($url, $class, $element) . $postfix . $after;
   }
 
 }

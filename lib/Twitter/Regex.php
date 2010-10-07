@@ -36,7 +36,7 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_BEFORE = '(?:[^/"\':!=]|^|\\:)';
+  const REGEX_URL_CHARS_BEFORE = '(?:[^-_/"\':!=a-z0-9]|^|\\:)';
 
   /**
    * Expression to match the domain portion of a URL.
@@ -44,6 +44,13 @@ abstract class Twitter_Regex {
    * @var  string
    */
   const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\s][\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
+
+  /**
+   * Expression to match handful of probable TLDs for protocol-less URLS.
+   *
+   * @var  string
+   */
+  const REGEX_PROBABLE_TLD = '/\.(?:com|net|org|gov|edu)$/i';
 
   /**
    * Expression to match characters that may come in the URL path.
@@ -71,7 +78,7 @@ abstract class Twitter_Regex {
   const REGEX_URL_CHARS_QUERY = '[a-z0-9!\\*\'\\(\\);:&=\\+\\$\\/%#\\[\\]\\-_\\.,~]';
 
   /**
-   * Expression to match characters that may come at the end of the URL query 
+   * Expression to match characters that may come at the end of the URL query
    * string.
    *
    * @var  string
@@ -83,14 +90,14 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_USERNAME_LIST = '$([^a-z0-9_]|^)([@|＠])([a-z0-9_]{1,20})(/[a-z][-_a-z0-9\x80-\xFF]{0,24})?$i';
+  const REGEX_USERNAME_LIST = '/([^a-z0-9_\/]|^|RT:?)([@＠]+)([a-z0-9_]{1,20})(\/[a-z][-_a-z0-9\x80-\xFF]{0,24})?([@＠\xC0-\xD6\xD8-\xF6\xF8-\xFF]?)/iu';
 
   /**
    * Expression to match a username mentioned anywhere in a tweet.
    *
    * @var  string
    */
-  const REGEX_USERNAME_MENTION = '/(^|[^a-zA-Z0-9_])[@＠]([a-zA-Z0-9_]{1,20})(?=(.|$))/';
+  const REGEX_USERNAME_MENTION = '/(^|[^a-z0-9_])[@＠]([a-z0-9_]{1,20})([@＠\xC0-\xD6\xD8-\xF6\xF8-\xFF]?)/iu';
 
   /**
    * Expression to match a hashtag.
@@ -99,7 +106,7 @@ abstract class Twitter_Regex {
    *
    * @todo  Match latin characters with accents.
    */
-  const REGEX_HASHTAG = '$(^|[^0-9A-Z&/]+)([#＃]+)([0-9A-Z_]*[A-Z_]+[a-z0-9_üÀ-ÖØ-öø-ÿ]*)$iu';
+  const REGEX_HASHTAG = '/(^|[^0-9A-Z&\/\?]+)([#＃]+)([0-9A-Z_]*[A-Z_]+[a-z0-9_üÀ-ÖØ-öø-ÿ]*)/iu';
 
   /**
    * Expression to match whitespace.
@@ -142,7 +149,7 @@ abstract class Twitter_Regex {
   protected static $REGEX_REPLY_USERNAME = null;
 
   /**
-   * The tweet to be used in parsing.  This should be populated by the 
+   * The tweet to be used in parsing.  This should be populated by the
    * constructor of all subclasses.
    *
    * @var  string
@@ -156,10 +163,10 @@ abstract class Twitter_Regex {
    */
   protected function __construct($tweet) {
     if (is_null(self::$REGEX_VALID_URL)) {
-      self::$REGEX_VALID_URL = '$('               # $1 Complete match
+      self::$REGEX_VALID_URL = '$(?:'             # $1 Complete match (preg_match already matches everything.)
         . '('.self::REGEX_URL_CHARS_BEFORE.')'    # $2 Preceding character
         . '('                                     # $3 Complete URL
-        . '(https?://|www\\.)'                    # $4 Protocol (or www)
+        . '((?:https?://|www\\.)?)'               # $4 Protocol (or www)
         . '('.self::REGEX_URL_DOMAIN.')'          # $5 Domain(s) (and port)
         . '(/'.self::REGEX_URL_CHARS_PATH.'*'     # $6 URL Path
         . self::REGEX_URL_CHARS_PATH_END.'?)?'

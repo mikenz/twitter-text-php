@@ -31,7 +31,6 @@ class Twitter_Extractor extends Twitter_Regex {
    * Provides fluent method chaining.
    *
    * @param  string  $tweet        The tweet to be converted.
-   * @param  bool    $full_encode  Whether to encode all special characters.
    *
    * @see  __construct()
    *

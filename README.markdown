@@ -3,7 +3,7 @@
 A library of PHP classes that provide auto-linking and extraction of usernames,
 lists, hashtags and URLs from tweets.  Originally created from twitter-text-rb
 and twitter-text-java projects by Matt Sanford and ported to PHP by Mike
-Cochrane, this library has been touched up by Nick Pope.
+Cochrane, this library has been improved and made more complete by Nick Pope.
 
 ## Features ##
 
@@ -22,6 +22,12 @@ Cochrane, this library has been touched up by Nick Pope.
  - Extract all user lists (of the form @username/list-name).
  - Extract all valid hashtags.
  - Extract all URLs.
+ - Support for international character sets.
+
+### Hit Highlighter ###
+
+ - Highlight text specifed by a range by surrounding with a tag.
+ - Support for highlighting when tweet has already been autolinked.
  - Support for international character sets.
 
 ## Examples ##

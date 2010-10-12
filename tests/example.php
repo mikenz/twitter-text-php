@@ -17,6 +17,7 @@ $ROOT = dirname(dirname(__FILE__));
 
 require_once $ROOT.'/lib/Twitter/Autolink.php';
 require_once $ROOT.'/lib/Twitter/Extractor.php';
+require_once $ROOT.'/lib/Twitter/HitHighlighter.php';
 
 $browser = (PHP_SAPI != 'cli');
 
@@ -149,6 +150,56 @@ if ($browser) {
 $html = Twitter_Autolink::create($tweet)
   ->setNoFollow(false)
   ->addLinks();
+
+if ($browser) {
+  echo '<h3>Markup</h3>', PHP_EOL;
+  echo '<pre class="markup"><code>';
+  echo htmlspecialchars($html, ENT_QUOTES, 'UTF-8', false);
+  echo '</code></pre>', PHP_EOL;
+} else {
+  echo 'Markup:', PHP_EOL, PHP_EOL;
+  echo wordwrap(htmlspecialchars($html, ENT_QUOTES, 'UTF-8', false));
+  echo PHP_EOL, PHP_EOL;
+}
+
+if ($browser) {
+  echo '<h3>Output</h3>', PHP_EOL;
+  echo '<div class="output">';
+  echo $html;
+  echo '</div>', PHP_EOL;
+} else {
+  echo 'Output:', PHP_EOL, PHP_EOL;
+  echo wordwrap($html);
+  echo PHP_EOL, PHP_EOL;
+}
+
+if ($browser) echo '<h2>';
+echo 'Hit Highlighter Examples';
+if ($browser) echo '</h2>';
+else echo PHP_EOL, '------------------------', PHP_EOL;
+echo PHP_EOL;
+
+$code = <<<EOPHP
+<?php
+\$tweet = 'Tweet mentioning @mikenz and referring to his list @mikeNZ/sports and website http://mikenz.geek.nz #awesome';
+\$hits  = array(array(70, 77), array(101, 108));
+\$html = Twitter_HitHighlighter::create(\$tweet)
+  ->addHitHighlighting(\$hits);
+echo \$html;
+EOPHP;
+if ($browser) {
+  echo '<h3>Source</h3>', PHP_EOL;
+  echo '<pre class="source">';
+  highlight_string($code);
+  echo '</pre>', PHP_EOL;
+} else {
+  echo 'Source:', PHP_EOL, PHP_EOL;
+  echo $code;
+  echo PHP_EOL, PHP_EOL;
+}
+
+$html = Twitter_HitHighlighter::create($tweet)
+  ->addHitHighlighting(array(array(70, 77), array(101, 108)));
 
 if ($browser) {
   echo '<h3>Markup</h3>', PHP_EOL;

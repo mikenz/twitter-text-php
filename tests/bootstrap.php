@@ -17,4 +17,5 @@ $DATA = $ROOT.'/tests/data/twitter-text-conformance';
 # Include required classes.
 require_once $ROOT.'/lib/Twitter/Autolink.php';
 require_once $ROOT.'/lib/Twitter/Extractor.php';
+require_once $ROOT.'/lib/Twitter/HitHighlighter.php';
 require_once $ROOT.'/tests/spyc/spyc.php';

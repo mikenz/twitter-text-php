@@ -39,7 +39,7 @@ class Twitter_HitHighlighterTest extends PHPUnit_Framework_TestCase {
   /**
    *
    */
-  public function extractMentionedUsernamesProvider() {
+  public function addHitHighlightingProvider() {
     return array_merge($this->providerHelper('plain_text'), $this->providerHelper('with_links'));
   }
 

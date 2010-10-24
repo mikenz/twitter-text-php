@@ -36,7 +36,7 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_BEFORE = '(?:[^-_/"\':!=a-z0-9]|^|\\:)';
+  const REGEX_URL_CHARS_BEFORE = '(?:[^-_/"\':!=a-z0-9@＠]|^|\\:)';
 
   /**
    * Expression to match the domain portion of a URL.

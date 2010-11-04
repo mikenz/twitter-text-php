@@ -43,7 +43,7 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\s][\\.-](?=[^\\p{P}\\s])|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
+  const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\p{Lo}\\s][\\.-](?=[^\\p{P}\\p{Lo}\\s])|[^\\p{P}\\p{Lo}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
 
   /**
    * Expression to match handful of probable TLDs for protocol-less URLS.

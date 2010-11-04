@@ -121,7 +121,7 @@ class Twitter_HitHighlighter extends Twitter_Regex {
       $start_in_chunk = false;
       # Flatten the multidimensional hits array:
       $hits_flat = array();
-      foreach ($hits as $hit) $hits_flat += $hit;
+      foreach ($hits as $hit) $hits_flat = array_merge($hits_flat, $hit);
       # Loop over the hit indices:
       for ($index = 0; $index < count($hits_flat); $index++) {
         $hit = $hits_flat[$index];

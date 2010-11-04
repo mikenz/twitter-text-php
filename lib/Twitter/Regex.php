@@ -36,35 +36,31 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_BEFORE = '(?:[^-_/"\':!=a-z0-9@＠]|^|\\:)';
+  const REGEX_URL_CHARS_BEFORE = '(?:[^-\\/"\':!=a-z0-9_@＠]|^|\\:)';
 
   /**
    * Expression to match the domain portion of a URL.
    *
    * @var  string
    */
-  const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\s][\\.-]|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
+  const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\s][\\.-](?=[^\\p{P}\\s])|[^\\p{P}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
 
   /**
    * Expression to match handful of probable TLDs for protocol-less URLS.
    *
    * @var  string
    */
-  const REGEX_PROBABLE_TLD = '/\.(?:com|net|org|gov|edu)$/i';
+  const REGEX_PROBABLE_TLD = '/\\.(?:com|net|org|gov|edu)$/iu';
 
   /**
    * Expression to match characters that may come in the URL path.
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_PATH = '(?:(?:\([a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\))|@[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\/|[\\.\\,]?[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~])';
+  const REGEX_URL_CHARS_PATH = '(?:(?:\\([a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\))|@[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\/|[\\.\\,]?[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~])';
 
   /**
    * Expression to match characters that may come at the end of the URL path.
-   *
-   * Valid end-of-path chracters (so /foo. does not gobble the period).
-   *   1. Allow ) for Wikipedia URLs.
-   *   2. Allow =&# for empty URL parameters and other URL-join artifacts.
    *
    * @var  string
    */
@@ -103,8 +99,6 @@ abstract class Twitter_Regex {
    * Expression to match a hashtag.
    *
    * @var  string
-   *
-   * @todo  Match latin characters with accents.
    */
   const REGEX_HASHTAG = '/(^|[^0-9A-Z&\/\?]+)([#＃]+)([0-9A-Z_]*[A-Z_]+[a-z0-9_üÀ-ÖØ-öø-ÿ]*)/iu';
 
@@ -163,17 +157,17 @@ abstract class Twitter_Regex {
    */
   protected function __construct($tweet) {
     if (is_null(self::$REGEX_VALID_URL)) {
-      self::$REGEX_VALID_URL = '$(?:'             # $1 Complete match (preg_match already matches everything.)
+      self::$REGEX_VALID_URL = '/(?:'             # $1 Complete match (preg_match already matches everything.)
         . '('.self::REGEX_URL_CHARS_BEFORE.')'    # $2 Preceding character
         . '('                                     # $3 Complete URL
-        . '((?:https?://|www\\.)?)'               # $4 Protocol (or www)
+        . '((?:https?:\\/\\/|www\\.)?)'           # $4 Protocol (or www)
         . '('.self::REGEX_URL_DOMAIN.')'          # $5 Domain(s) (and port)
-        . '(/'.self::REGEX_URL_CHARS_PATH.'*'     # $6 URL Path
+        . '(\\/'.self::REGEX_URL_CHARS_PATH.'*'   # $6 URL Path
         . self::REGEX_URL_CHARS_PATH_END.'?)?'
         . '(\\?'.self::REGEX_URL_CHARS_QUERY.'*'  # $7 Query String
         . self::REGEX_URL_CHARS_QUERY_END.')?'
         . ')'
-        . ')$i';
+        . ')/iux';
     }
     if (is_null(self::$REGEX_REPLY_USERNAME)) {
       self::$REGEX_REPLY_USERNAME = '/^('.self::REGEX_WHITESPACE.')*[@＠]([a-zA-Z0-9_]{1,20})/';

@@ -58,3 +58,10 @@ There are a couple of options for testing conformance:
 2. Run `tests/runtests.php` from the command line.
 3. Make `tests/runtests.php` accessible on a web server and view it in your
    browser.
+
+## Thanks & Contributions ##
+
+The bulk of this library is from the heroic efforts of:
+
+ - Mike Cochrane (https://github.com/mikenz): For the original code
+ - Nick Pope (https://github.com/ngnpope): For the bulk of the maintenance work to date.

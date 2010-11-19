@@ -68,6 +68,8 @@ $functions = array(
   'mentions' => 'extractMentionedUsernames',
   'replies'  => 'extractRepliedUsernames',
   'hashtags_with_indices' => 'extractHashtagsWithIndices',
+  'urls_with_indices'     => 'extractURLsWithIndices',
+  'mentions_with_indices' => 'extractMentionedUsernamesWithIndices',
 );
 
 # Perform testing.

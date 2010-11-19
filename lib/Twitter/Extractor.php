@@ -64,6 +64,8 @@ class Twitter_Extractor extends Twitter_Regex {
       'mentions' => $this->extractMentionedUsernames(),
       'replyto'  => $this->extractRepliedUsernames(),
       'hashtags_with_indices' => $this->extractHashtagsWithIndices(),
+      'urls_with_indices'     => $this->extractURLsWithIndices(),
+      'mentions_with_indices' => $this->extractMentionedUsernamesWithIndices(),
     );
   }
 
@@ -145,6 +147,44 @@ class Twitter_Extractor extends Twitter_Regex {
       $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
       $start += mb_strlen($matches[1][$i][0]);
       $length = mb_strlen($m[$i]['hashtag']);
+      $m[$i]['indices'] = array($start, $start + $length + 1);
+    }
+    return $m;
+  }
+
+  /**
+   * Extracts all the URLs and the indices they occur at from the tweet.
+   *
+   * @return  array  The URLs elements in the tweet.
+   */
+  public function extractURLsWithIndices() {
+    preg_match_all(self::$REGEX_VALID_URL, $this->tweet, $matches, PREG_OFFSET_CAPTURE);
+    $m = &$matches[2];
+    for ($i = 0; $i < count($m); $i++) {
+      $m[$i] = array_combine(array('url', 'indices'), $m[$i]);
+      # XXX: Fix for PREG_OFFSET_CAPTURE returning byte offsets...
+      $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
+      $start += mb_strlen($matches[1][$i][0]);
+      $length = mb_strlen($m[$i]['url']);
+      $m[$i]['indices'] = array($start, $start + $length);
+    }
+    return $m;
+  }
+
+  /**
+   * Extracts all the usernames and the indices they occur at from the tweet.
+   *
+   * @return  array  The username elements in the tweet.
+   */
+  public function extractMentionedUsernamesWithIndices() {
+    preg_match_all(self::REGEX_USERNAME_MENTION, $this->tweet, $matches, PREG_OFFSET_CAPTURE);
+    $m = &$matches[2];
+    for ($i = 0; $i < count($m); $i++) {
+      $m[$i] = array_combine(array('screen_name', 'indices'), $m[$i]);
+      # XXX: Fix for PREG_OFFSET_CAPTURE returning byte offsets...
+      $start = mb_strlen(substr($this->tweet, 0, $matches[1][$i][1]));
+      $start += mb_strlen($matches[1][$i][0]);
+      $length = mb_strlen($m[$i]['screen_name']);
       $m[$i]['indices'] = array($start, $start + $length + 1);
     }
     return $m;

@@ -103,4 +103,34 @@ class Twitter_ExtractorTest extends PHPUnit_Framework_TestCase {
     return $this->providerHelper('hashtags_with_indices');
   }
 
+  /**
+   * @dataProvider  extractURLsWithIndicesProvider
+   */
+  public function testExtractURLsWithIndices($description, $text, $expected) {
+    $extracted = Twitter_Extractor::create($text)->extractURLsWithIndices();
+    $this->assertSame($expected, $extracted, $description);
+  }
+
+  /**
+   *
+   */
+  public function extractURLsWithIndicesProvider() {
+    return $this->providerHelper('urls_with_indices');
+  }
+
+  /**
+   * @dataProvider  extractMentionedUsernamesWithIndicesProvider
+   */
+  public function testExtractMentionedUsernamesWithIndices($description, $text, $expected) {
+    $extracted = Twitter_Extractor::create($text)->extractMentionedUsernamesWithIndices();
+    $this->assertSame($expected, $extracted, $description);
+  }
+
+  /**
+   *
+   */
+  public function extractMentionedUsernamesWithIndicesProvider() {
+    return $this->providerHelper('mentions_with_indices');
+  }
+
 }

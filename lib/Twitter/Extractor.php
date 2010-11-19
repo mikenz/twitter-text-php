@@ -63,7 +63,7 @@ class Twitter_Extractor extends Twitter_Regex {
       'urls'     => $this->extractURLs(),
       'mentions' => $this->extractMentionedUsernames(),
       'replyto'  => $this->extractRepliedUsernames(),
-      'hashtags_with_indices' => $this->extractHashtags(),
+      'hashtags_with_indices' => $this->extractHashtagsWithIndices(),
     );
   }
 

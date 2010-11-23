@@ -79,7 +79,7 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_QUERY_END = '[a-z0-9_&=#]';
+  const REGEX_URL_CHARS_QUERY_END = '[a-z0-9_&=#\\/]';
 
   /**
    * Expression to match a username followed by a list.

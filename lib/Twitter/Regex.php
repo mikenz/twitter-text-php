@@ -57,7 +57,7 @@ abstract class Twitter_Regex {
    *
    * @var  string
    */
-  const REGEX_URL_CHARS_PATH = '(?:(?:\\([a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\))|@[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\/|[\\.\\,]?[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~])';
+  const REGEX_URL_CHARS_PATH = '(?:(?:\\([a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\))|@[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_,~]+\\/|[\\.\\,]?(?:[a-z0-9!\\*\';:=\\+\\$\\/%#\\[\\]\\-_~]|,(?!\s)))';
 
   /**
    * Expression to match characters that may come at the end of the URL path.

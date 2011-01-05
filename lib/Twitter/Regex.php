@@ -46,13 +46,6 @@ abstract class Twitter_Regex {
   const REGEX_URL_DOMAIN = '(?:[^\\p{P}\\p{Lo}\\s][\\.-](?=[^\\p{P}\\p{Lo}\\s])|[^\\p{P}\\p{Lo}\\s])+\\.[a-z]{2,}(?::[0-9]+)?';
 
   /**
-   * Expression to match handful of probable TLDs for protocol-less URLS.
-   *
-   * @var  string
-   */
-  const REGEX_PROBABLE_TLD = '/\\.(?:com|net|org|gov|edu)$/iu';
-
-  /**
    * Expression to match characters that may come in the URL path.
    *
    * @var  string
@@ -160,7 +153,7 @@ abstract class Twitter_Regex {
       self::$REGEX_VALID_URL = '/(?:'             # $1 Complete match (preg_match already matches everything.)
         . '('.self::REGEX_URL_CHARS_BEFORE.')'    # $2 Preceding character
         . '('                                     # $3 Complete URL
-        . '((?:https?:\\/\\/|www\\.)?)'           # $4 Protocol (or www)
+        . '(https?:\\/\\/)'                       # $4 Protocol (or www)
         . '('.self::REGEX_URL_DOMAIN.')'          # $5 Domain(s) (and port)
         . '(\\/'.self::REGEX_URL_CHARS_PATH.'*'   # $6 URL Path
         . self::REGEX_URL_CHARS_PATH_END.'?)?'

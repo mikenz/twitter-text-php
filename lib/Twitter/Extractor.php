@@ -87,19 +87,7 @@ class Twitter_Extractor extends Twitter_Regex {
   public function extractURLs() {
     preg_match_all(self::$REGEX_VALID_URL, $this->tweet, $matches);
     list($all, $before, $url, $protocol, $domain, $path, $query) = array_pad($matches, 7, '');
-    $i = count($url)-1;
-    for (; $i >= 0; $i--) {
-      if (!preg_match('!https?://!', $protocol[$i])) {
-        # Note: $protocol can contain 'www.' if no protocol exists!
-        if (preg_match(self::REGEX_PROBABLE_TLD, $domain[$i]) || strtolower($protocol[$i]) === 'www.') {
-          $url[$i] = 'http://'.(strtolower($protocol[$i]) === 'www.' ? $protocol[$i] : '').$domain[$i];
-        } else {
-          unset($url[$i]);
-        }
-      }
-    }
-    # Renumber the array:
-    return array_values($url);
+    return $url;
   }
 
   /**

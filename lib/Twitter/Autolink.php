@@ -413,9 +413,8 @@ class Twitter_Autolink extends Twitter_Regex {
   protected function _addLinksToURLs($matches) {
     list($all, $before, $url, $protocol, $domain, $path, $query) = array_pad($matches, 7, '');
     $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false);
-    if (!$protocol && !preg_match(self::REGEX_PROBABLE_TLD, $domain)) return $all;
-    $href = ((!$protocol || strtolower($protocol) === 'www.') ? 'http://'.$url : $url);
-    return $before . $this->wrap($href, $this->class_url, $url);
+    if (!$protocol) return $all;
+    return $before . $this->wrap($url, $this->class_url, $url);
   }
 
   /**
